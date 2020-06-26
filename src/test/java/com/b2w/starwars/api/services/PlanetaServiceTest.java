@@ -68,6 +68,15 @@ public class PlanetaServiceTest {
 		
 	}
 	
+	@Test
+	void obterTodosPlanetasContendoNome() {
+
+		List<Planeta> plnts = service.obterTodosContendoNome("Ta");
+		
+		assertNotNull(plnts.get(0)); 		
+		assertEquals(plnts.get(0).getNome(), "Tatooine"); 		
+		
+	}
 	
 	
 	@Test

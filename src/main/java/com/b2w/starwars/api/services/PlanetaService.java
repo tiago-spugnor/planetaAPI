@@ -25,8 +25,12 @@ public class PlanetaService {
 	@Autowired
     private RestTemplate restTemplate;
 	
-	public List<Planeta> obterTodos() {
+	public List<Planeta> obterTodos() {		
 		return repositorio.findAll();
+	}
+	
+	public List<Planeta> obterTodosContendoNome(String nome) {		
+		return repositorio.findByNomeContaining(nome);
 	}
 	
 	public Planeta obterPorId(String id) {

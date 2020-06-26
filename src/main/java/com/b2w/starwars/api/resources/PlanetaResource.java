@@ -2,6 +2,7 @@ package com.b2w.starwars.api.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,8 +29,14 @@ public class PlanetaResource {
 	private PlanetaService service;
 	
 	@GetMapping
-	public ResponseEntity<Response<List<Planeta>>> findAll() {
-		List<Planeta> list = service.obterTodos();
+	public ResponseEntity<Response<List<Planeta>>> findAll(@RequestParam Map<String,String> params) {
+		List<Planeta> list;
+		
+		if(params.containsKey("search")) {
+			list = service.obterTodosContendoNome(params.get("search"));
+		} else {
+			list = service.obterTodos();			
+		}
 		
 		Response<List<Planeta>> response = new Response<List<Planeta>>();
 		response.setCount(list.size());

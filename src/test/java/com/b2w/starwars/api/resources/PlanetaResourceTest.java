@@ -49,6 +49,16 @@ public class PlanetaResourceTest {
 	}
 	
 	@Test
+	public void getTodosPlanetasComSearch() throws Exception {
+
+		mvc.perform(get("/planetas?search=" + "Tat")
+			      .contentType(MediaType.APPLICATION_JSON))
+			      .andExpect(status().isOk())
+			      .andExpect(jsonPath("$.count", is(1)))
+			      .andExpect(jsonPath("$.returns[0].nome", is("Tatooine")));
+	}
+	
+	@Test
 	public void getPlanetaPorId() throws Exception {
 
 		mvc.perform(get("/planetas/id/" + "5ef538217189f8051adc4e1d")
