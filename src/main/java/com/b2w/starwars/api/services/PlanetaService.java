@@ -10,6 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import com.b2w.starwars.api.model.Planeta;
 import com.b2w.starwars.api.model.PlanetaRestResponse;
 import com.b2w.starwars.api.repositories.PlanetaRepository;
+import com.b2w.starwars.api.services.exceptions.ObjetoJaCadastradoException;
+import com.b2w.starwars.api.services.exceptions.ObjetoNaoEncontradoException;
+import com.b2w.starwars.api.services.exceptions.ParametroObrigatorioException;
 
 @Service
 public class PlanetaService {
@@ -27,30 +30,49 @@ public class PlanetaService {
 	}
 	
 	public Planeta obterPorId(String id) {
-		Optional<Planeta> user = repositorio.findById(id);
-		return user.orElseThrow( () -> new RuntimeException("Objeto não encontrado!"));
+		Optional<Planeta> planeta = repositorio.findById(id);
+		return planeta.orElseThrow( () -> new ObjetoNaoEncontradoException("Planeta com id = " + id + " não foi encontrado!"));
 	}
 	
 	public List<Planeta> obterPorNome(String nome) {
-		Optional<List<Planeta>> user = repositorio.findByNomeContaining(nome);
-		return user.orElseThrow( () -> new RuntimeException("Objeto não encontrado!"));
+		List<Planeta> listPlanetas = repositorio.findByNomeContaining(nome);
+		
+		if( listPlanetas.size() == 0 ) {
+			throw new ObjetoNaoEncontradoException("Planeta com nome contendo '" + nome + "' não foi encontrado!");
+		}
+		
+		return listPlanetas;
 	}
 	
-	public Planeta adicionar(Planeta obj) {
+	public Planeta adicionar(Planeta planeta) {
 		
-		PlanetaRestResponse response = restTemplate.getForObject(URI_STARWARS + "?search=" + obj.getNome() , PlanetaRestResponse.class);
+		if( planeta.getNome() == null ) {
+			throw new ParametroObrigatorioException("O atributo 'Nome' é obrigatório!");
+		}
+		if( planeta.getClima() == null ) {
+			throw new ParametroObrigatorioException("O atributo 'Clima' é obrigatório!");
+		}
+		if( planeta.getTerreno() == null ) {
+			throw new ParametroObrigatorioException("O atributo 'Terreno' é obrigatório!");
+		}
+		
+		if( repositorio.findByNome( planeta.getNome()) != null ) {
+			throw new ObjetoJaCadastradoException("Planeta com nome '" + planeta.getNome() + "' já está cadastrado!");
+		}
+		
+		PlanetaRestResponse response = restTemplate.getForObject(URI_STARWARS + "?search=" + planeta.getNome() , PlanetaRestResponse.class);
 		
 		if(!response.isEmpty()) {
-			obj.setNumeroOcorrencias(response.getResults().get(0).getFilms().length);
+			planeta.setNumeroOcorrencias(response.getResults().get(0).getFilms().length);
 		} else {
-			//ERRO: Planeta não encontrado			
+			throw new ObjetoNaoEncontradoException("Planeta com nome '" + planeta.getNome() + "' não foi encontrado em um filme de Star Wars!");			
 		}		
 		
-		return repositorio.insert(obj); // PROVISÓRIO
+		return repositorio.insert(planeta); 
 	}
 	
 	public void deletar(String id) {
-		this.obterPorId(id);
+		this.obterPorId(id);		
 		repositorio.deleteById(id);
 	}
 }
