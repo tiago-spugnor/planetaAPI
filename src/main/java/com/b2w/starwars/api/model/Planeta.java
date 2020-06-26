@@ -19,6 +19,25 @@ public class Planeta implements Serializable{
 	private Integer numeroOcorrencias;
 	
 	
+	public Planeta() {
+		
+	}
+	
+	public Planeta(String id, String nome, String clima, String terreno) {
+		this.id = id;
+		this.nome = nome;
+		this.clima = clima;
+		this.terreno = terreno;
+	}
+	
+	public Planeta(String id, String nome, String clima, String terreno, Integer ocorrencias) {
+		this.id = id;
+		this.nome = nome;
+		this.clima = clima;
+		this.terreno = terreno;
+		this.numeroOcorrencias = ocorrencias;
+	}
+
 	public String getId() {
 		return id;
 	}

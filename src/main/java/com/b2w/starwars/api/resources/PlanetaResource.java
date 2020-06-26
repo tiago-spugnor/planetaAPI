@@ -44,8 +44,8 @@ public class PlanetaResource {
 	}
 	
 	@GetMapping(value = "nome/{nome}")
-	public ResponseEntity<List<Planeta>> findByNome(@PathVariable String nome) {
-		List<Planeta> obj = service.obterPorNome(nome);
+	public ResponseEntity<Planeta> findByNome(@PathVariable String nome) {
+		Planeta obj = service.obterPorNome(nome);
 		
 		return ResponseEntity.ok().body(obj);
 	}

@@ -34,14 +34,9 @@ public class PlanetaService {
 		return planeta.orElseThrow( () -> new ObjetoNaoEncontradoException("Planeta com id = " + id + " não foi encontrado!"));
 	}
 	
-	public List<Planeta> obterPorNome(String nome) {
-		List<Planeta> listPlanetas = repositorio.findByNomeContaining(nome);
-		
-		if( listPlanetas.size() == 0 ) {
-			throw new ObjetoNaoEncontradoException("Planeta com nome contendo '" + nome + "' não foi encontrado!");
-		}
-		
-		return listPlanetas;
+	public Planeta obterPorNome(String nome) {
+		Optional<Planeta> planeta = repositorio.findByNome(nome);		
+		return planeta.orElseThrow( () -> new ObjetoNaoEncontradoException("Planeta com nome = '" + nome + "' não foi encontrado!"));
 	}
 	
 	public Planeta adicionar(Planeta planeta) {
@@ -56,13 +51,18 @@ public class PlanetaService {
 			throw new ParametroObrigatorioException("O atributo 'Terreno' é obrigatório!");
 		}
 		
-		if( repositorio.findByNome( planeta.getNome()) != null ) {
+		if( repositorio.findByNome( planeta.getNome()).isPresent() ) {
 			throw new ObjetoJaCadastradoException("Planeta com nome '" + planeta.getNome() + "' já está cadastrado!");
 		}
 		
 		PlanetaRestResponse response = restTemplate.getForObject(URI_STARWARS + "?search=" + planeta.getNome() , PlanetaRestResponse.class);
 		
 		if(!response.isEmpty()) {
+			
+			if( !response.getResults().get(0).getName().equals(planeta.getNome()) ) {
+				throw new ObjetoNaoEncontradoException("Planeta com nome '" + planeta.getNome() + "' não foi encontrado. Você quis dizer '" + response.getResults().get(0).getName() + "'?");
+			}
+			
 			planeta.setNumeroOcorrencias(response.getResults().get(0).getFilms().length);
 		} else {
 			throw new ObjetoNaoEncontradoException("Planeta com nome '" + planeta.getNome() + "' não foi encontrado em um filme de Star Wars!");			
