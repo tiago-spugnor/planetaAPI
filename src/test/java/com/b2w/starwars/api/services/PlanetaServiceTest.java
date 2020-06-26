@@ -9,11 +9,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.b2w.starwars.api.model.Planeta;
 import com.b2w.starwars.api.repositories.PlanetaRepository;
@@ -21,7 +19,7 @@ import com.b2w.starwars.api.services.exceptions.ObjetoJaCadastradoException;
 import com.b2w.starwars.api.services.exceptions.ObjetoNaoEncontradoException;
 import com.b2w.starwars.api.services.exceptions.ParametroObrigatorioException;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @ActiveProfiles("test")
 public class PlanetaServiceTest {
@@ -38,6 +36,7 @@ public class PlanetaServiceTest {
 		repository.deleteAll();
 		repository.insert(new Planeta("5ef538217189f8051adc4e1d", "Tatooine", "Árido", "Deserto", 5));
 	}
+	
 	
 	@Test
 	void adicionarPlaneta() {

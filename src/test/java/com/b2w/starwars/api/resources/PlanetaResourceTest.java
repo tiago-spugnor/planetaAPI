@@ -10,20 +10,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.b2w.starwars.api.model.Planeta;
 import com.b2w.starwars.api.repositories.PlanetaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
@@ -34,7 +31,7 @@ public class PlanetaResourceTest {
 	
     @Autowired
     private MockMvc mvc;
-	
+    
 	@BeforeEach
 	void eraseDatabase() {
 		repository.deleteAll();
