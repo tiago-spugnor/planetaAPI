@@ -75,4 +75,18 @@ public class PlanetaService {
 		this.obterPorId(id);		
 		repositorio.deleteById(id);
 	}
+	
+	public void atualizar(Planeta planetaAtualizado) {
+		Planeta planetaSalvo = this.obterPorId(planetaAtualizado.getId());
+		updatePlaneta(planetaSalvo, planetaAtualizado);
+		
+		repositorio.save(planetaSalvo);
+	}
+	
+	private void updatePlaneta(Planeta planetaSalvo, Planeta planetaAtualizado) {
+
+		if( planetaAtualizado.getClima() != null) planetaSalvo.setClima(planetaAtualizado.getClima());
+		if( planetaAtualizado.getTerreno() != null) planetaSalvo.setTerreno(planetaAtualizado.getTerreno());
+
+	}
 }

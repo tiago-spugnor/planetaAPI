@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +88,16 @@ public class PlanetaResourceTest {
 			      .contentType(MediaType.APPLICATION_JSON)
 			      .content(asJsonString(new Planeta(null, "Tatooine", "Árido", "Deserto") )))
 			      .andExpect(status().isCreated());
+	}
+	
+	@Test
+	public void putPlaneta() throws Exception {
+		
+		mvc.perform(put("/planetas/" + "5ef538217189f8051adc4e1d" )
+			      .contentType(MediaType.APPLICATION_JSON)
+			      .content(asJsonString(new Planeta(null, "Tatooine", "Árido", "Deserto Demais") )))
+			      .andExpect(status().isNoContent());
+		
 	}
 	
 	public static String asJsonString(final Object obj) {

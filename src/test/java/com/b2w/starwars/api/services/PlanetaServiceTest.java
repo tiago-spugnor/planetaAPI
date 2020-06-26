@@ -98,11 +98,20 @@ public class PlanetaServiceTest {
 		assertThrows(ObjetoNaoEncontradoException.class, () -> { service.obterPorNome("Tatooine"); });
 	}
 	
-	
-	
 	@Test
 	void deletarPlaneta() {
 		service.deletar("5ef538217189f8051adc4e1d");		
 	}
 	
+	@Test
+	void atualizarPlaneta() {
+		Planeta novoPlaneta = new Planeta("5ef538217189f8051adc4e1d", "Tatooine", "Árido", "Deserto Demais", 5);
+		
+		service.atualizar(novoPlaneta);	
+		
+		Planeta planetaSalvo = repository.findById("5ef538217189f8051adc4e1d").get();
+		
+		assertEquals(novoPlaneta, planetaSalvo);
+		assertEquals(novoPlaneta.getTerreno(), planetaSalvo.getTerreno());
+	}
 }
